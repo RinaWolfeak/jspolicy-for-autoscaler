@@ -1,0 +1,109 @@
+apiVersion: policy.jspolicy.com/v1beta1
+kind: JsPolicy
+metadata:
+  name: "create.autoscaler.example"
+spec:
+  operations: ["CREATE"]
+  resources: ["clusters"]
+  apiGroups: ["cluster.x-k8s.io"]
+  javascript: |
+    const nameCl = request.object.metadata.name
+    create({
+      apiVersion: "catalog.cattle.io/v1",
+      kind: "App",
+      metadata: {
+        name: nameCl + "-autoscaler",
+        namespace: "fleet-default"
+      },
+      spec: {
+        name: nameCl + "-autoscaler",
+        namespace: "fleet-default",
+        helmVersion: 3,
+        chart: {
+          metadata: {
+            annotations: {
+              catalog.cattle.io/ui-source-repo: "autoscaler",
+              catalog.cattle.io/ui-source-repo-type: "cluster"
+            },
+            apiVersion: "v2",
+            appVersion: "1.23.0",
+            description: "Scales Kubernetes worker nodes within autoscaling groups.",
+            name: "cluster-autoscaler",
+            type: "application",
+            version: "9.21.1"
+          }
+        },
+        resources: [
+          {
+            apiVersion: "policy/v1",
+            kind: "PodDisruptionBudget",
+            name: nameCl + "-autoscaler-clusterapi-cluster-autoscaler",
+            namespace: "fleet-default"
+          },
+          {
+            apiVersion: "v1",
+            kind: "ServiceAccount",
+            name: nameCl + "-autoscaler-clusterapi-cluster-autoscaler",
+            namespace: "fleet-default"
+          },
+          {
+            apiVersion: "rbac.authorization.k8s.io/v1",
+            kind: "ClusterRole",
+            name: nameCl + "-autoscaler-clusterapi-cluster-autoscaler"
+          },
+          {
+            apiVersion: "rbac.authorization.k8s.io/v1",
+            kind: "ClusterRoleBinding",
+            name: nameCl + "-autoscaler-clusterapi-cluster-autoscaler"
+          },
+          {
+            apiVersion: "rbac.authorization.k8s.io/v1",
+            kind: "Role",
+            name: nameCl + "-autoscaler-clusterapi-cluster-autoscaler",
+            namespace: "fleet-default"
+          },
+          {
+            apiVersion: "rbac.authorization.k8s.io/v1",
+            kind: "RoleBinding",
+            name: nameCl + "-autoscaler-clusterapi-cluster-autoscaler",
+            namespace: "fleet-default"
+          },
+          {
+            apiVersion: "v1",
+            kind: "Service",
+            name: nameCl + "-autoscaler-clusterapi-cluster-autoscaler",
+            namespace: "fleet-default"
+          },
+          {
+            apiVersion: "apps/v1",
+            kind: "Deployment",
+            name: nameCl + "-autoscaler-clusterapi-cluster-autoscaler",
+            namespace: "fleet-default"
+          }
+        ],
+        values: {
+          autoDiscovery: {
+            clusterName: nameCl
+          },
+          cloudProvider: "clusterapi",
+          extraArgs: {
+            balance-similar-node-groups: true,
+            clusterapi-cloud-config-authoritative: true,
+            cordon-node-before-terminating: true,
+            daemonset-eviction-for-empty-nodes: true,
+            kubeconfig: "/etc/kubeconfig/value",
+            namespace: "kube-system",
+            node-group-auto-discovery: "clusterapi:clusterName=nameCl",
+            skip-nodes-with-local-storage: false,
+            skip-nodes-with-system-pods: false
+          },
+          extraVolumeSecrets: {
+            kubeconfig: {
+              mountPath: "/etc/kubeconfig",
+              name: nameCl + "-kubeconfig"
+            }
+          }
+        }
+      }
+    });    
+  
