@@ -22,8 +22,8 @@ spec:
         chart: {
           metadata: {
             annotations: {
-              catalog.cattle.io/ui-source-repo: "autoscaler",
-              catalog.cattle.io/ui-source-repo-type: "cluster"
+              "catalog.cattle.io/ui-source-repo": "autoscaler",
+              "catalog.cattle.io/ui-source-repo-type": "cluster"
             },
             apiVersion: "v2",
             appVersion: "1.23.0",
