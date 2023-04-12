@@ -93,7 +93,7 @@ spec:
             "daemonset-eviction-for-empty-nodes": true,
             "kubeconfig": "/etc/kubeconfig/value",
             "namespace": "kube-system",
-            "node-group-auto-discovery": "clusterapi:clusterName=nameCl",
+            "node-group-auto-discovery": "clusterapi:clusterName="nameCl,
             "skip-nodes-with-local-storage": false,
             "skip-nodes-with-system-pods": false
           },
