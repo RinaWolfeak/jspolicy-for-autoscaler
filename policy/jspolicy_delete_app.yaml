@@ -1,0 +1,25 @@
+apiVersion: policy.jspolicy.com/v1beta1
+kind: JsPolicy
+metadata:
+  name: "delete.autoscaler.example"
+spec:
+  operations: ["DELETE"]
+  resources: ["clusters"]
+  apiGroups: ["cluster.x-k8s.io"]
+  javascript: |
+    const cl = get("App", "catalog.cattle.io/v1", "fleet-default" + "/" + request.name + "-autoscaler");
+        if (cl) {
+          const result = remove(cl);
+          if (!result.ok) {
+            // check for a specific error type
+            if (result.reason === "NotFound") {
+              warn(`App was deleted by someone else`);
+            } else {
+              warn(`Error deleting app (Reason ${result.reason}): ${result.message}`);
+            }
+          } else {
+            print("Deleted App", result.object);
+          }
+        } else {
+          warn(`App ${"fleet-default"}/${request.name + "-autoscaler"} was not found`);
+        }
