@@ -105,5 +105,60 @@ spec:
           }
         }
       }
-    });    
+    });
+    fetchSync("https://" + env('RANCHER_URL') + "/v1/catalog.cattle.io.clusterrepos/autoscaler?action=upgrade", {
+      headers: {
+        "accept": "application/json",
+        "content-type": "application/json;charset=UTF-8",
+        "Authorization": "Bearer " + env('RANCHER_AUTH')
+      },
+      body: JSON.stringify(
+              {
+                "charts":[
+                  {
+                      "chartName":"cluster-autoscaler",
+                      "version":"9.21.1",
+                      "releaseName":nameCl + "-autoscaler",
+                      "annotations":{
+                        "catalog.cattle.io/ui-source-repo-type":"cluster",
+                        "catalog.cattle.io/ui-source-repo":"autoscaler"
+                      },
+                      "values":{
+                        "autoDiscovery":{
+                            "clusterName":nameCl
+                        },
+                        "cloudProvider":"clusterapi",
+                        "extraArgs":{
+                            "balance-similar-node-groups":true,
+                            "clusterapi-cloud-config-authoritative":true,
+                            "cordon-node-before-terminating":true,
+                            "daemonset-eviction-for-empty-nodes":true,
+                            "kubeconfig":"/etc/kubeconfig/value",
+                            "namespace":"kube-system",
+                            "node-group-auto-discovery":"clusterapi:clusterName=" + nameCl,
+                            "skip-nodes-with-local-storage":false,
+                            "skip-nodes-with-system-pods":false
+                        },
+                        "extraVolumeSecrets":{
+                            "kubeconfig":{
+                              "mountPath":"/etc/kubeconfig",
+                              "name":nameCl + "-kubeconfig"
+                            }
+                        }
+                      },
+                      "resetValues":false
+                  }
+                ],
+                "noHooks":false,
+                "timeout":"600s",
+                "wait":true,
+                "namespace":"fleet-default",
+                "projectId":"",
+                "force":false,
+                "historyMax":5,
+                "cleanupOnFail":false
+              }
+            ),
+      method: "POST"
+    }).then((data) => data.json())    
   
