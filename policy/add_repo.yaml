@@ -1,0 +1,6 @@
+kind: ClusterRepo
+apiVersion: catalog.cattle.io/v1
+metadata:
+  name: autoscaler
+spec:
+  repo: https://kubernetes.github.io/autoscaler/
