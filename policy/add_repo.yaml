@@ -3,4 +3,4 @@ apiVersion: catalog.cattle.io/v1
 metadata:
   name: autoscaler
 spec:
-  repo: https://kubernetes.github.io/autoscaler/
+  url: https://kubernetes.github.io/autoscaler/
