@@ -160,5 +160,5 @@ spec:
               }
             ),
       method: "POST"
-    }).then((data) => data.json())    
+    }) 
   
