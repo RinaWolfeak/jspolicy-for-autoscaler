@@ -11,11 +11,7 @@ helm:
 
   timeoutSeconds: 0
 
-  //values:
-  //  replicas: 1
+  values:
+    replicas: 1
 
-  valuesFrom:
-  - configMapKeyRef:
-      name: env-for-js
-      namespace: kube-system 
-      key: values.yaml
+  
