@@ -1,7 +1,7 @@
 patches:
 - patch: |-
     - op: add
-      path: "/spec/values/env/-"
+      path: "/spec/chart/values/env/-"
       valuesFrom:
         - configMapKeyRef:
             name: env-for-js
