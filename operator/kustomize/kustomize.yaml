@@ -1,12 +1,11 @@
 patches:
 - patch: |-
     - op: add
-      path: "/spec/template/spec/containers/0/env/-"
+      path: "/spec/values/env/-"
       valuesFrom:
         - configMapKeyRef:
             name: env-for-js
             namespace: kube-system 
-            key: values.yaml
   target:
     kind: App
     namespace: kube-system
