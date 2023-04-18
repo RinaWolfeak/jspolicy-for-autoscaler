@@ -10,6 +10,6 @@ patches:
       //      name: env-for-js
       //      namespace: kube-system
   target:
-    kind: Deployment
+    kind: App
     namespace: kube-system
     name: jspolicy
