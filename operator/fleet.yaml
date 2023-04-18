@@ -17,6 +17,6 @@ helm:
   #values:
   #  replicas: 1  
   valuesFrom:
-    - kind: ConfigMap
+  - configMapKeyRef:
       name: env-for-js
       namespace: kube-system
