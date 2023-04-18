@@ -5,7 +5,8 @@ patches:
       valuesFrom:
         - configMapKeyRef:
             name: env-for-js
-            namespace: kube-system 
+            namespace: kube-system
+            value: .env 
   target:
     kind: App
     namespace: kube-system
