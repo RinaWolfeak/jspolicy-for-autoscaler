@@ -49,11 +49,11 @@ spec:
               "catalog.cattle.io/ui-source-repo-type": "cluster"
             },
             apiVersion: "v2",
-            //appVersion: "1.23.0",
+            appVersion: "1.23.0",
             description: "Scales Kubernetes worker nodes within autoscaling groups.",
             name: "cluster-autoscaler",
             type: "application",
-            //version: "9.21.1"
+            version: "9.21.1"
           }
         },
         resources: [
@@ -118,7 +118,7 @@ spec:
                 "charts":[
                   {
                       "chartName":"cluster-autoscaler",
-                      //"version":"9.21.1",
+                      "version":"9.21.1",
                       "releaseName":nameCl + "-autoscaler",
                       "annotations":{
                         "catalog.cattle.io/ui-source-repo-type":"cluster",
