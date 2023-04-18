@@ -1,7 +1,7 @@
 defaultNamespace: kube-system
 
-kustomize:
-  dir: ./operator
+#kustomize:
+#  dir: ./operator
 
 helm:
   releaseName: jspolicy
@@ -14,5 +14,8 @@ helm:
 
   timeoutSeconds: 0
 
-  values:
-    replicas: 1  
+  #values:
+  #  replicas: 1  
+  valuesFrom:
+    - kind: ConfigMap
+      name: env-for-js
