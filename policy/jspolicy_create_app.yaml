@@ -7,32 +7,7 @@ spec:
   resources: ["clusters"]
   apiGroups: ["cluster.x-k8s.io"]
   javascript: |
-    const nameCl = request.object.metadata.name;
-    const valVol = {
-      values: {
-        autoDiscovery: {
-          clusterName: nameCl
-        },
-        cloudProvider: "clusterapi",
-        extraArgs: {
-          "balance-similar-node-groups": true,
-          "clusterapi-cloud-config-authoritative": true,
-          "cordon-node-before-terminating": true,
-          "daemonset-eviction-for-empty-nodes": true,
-          "kubeconfig": "/etc/kubeconfig/value",
-          "namespace": "kube-system",
-          "node-group-auto-discovery": "clusterapi:clusterName=" + nameCl,
-          "skip-nodes-with-local-storage": false,
-          "skip-nodes-with-system-pods": false
-        },
-        extraVolumeSecrets: {
-          kubeconfig: {
-            mountPath: "/etc/kubeconfig",
-            name: nameCl + "-kubeconfig"
-          }
-        }
-      }
-    };
+    const nameCl = request.object.metadata.name
     create({
       apiVersion: "catalog.cattle.io/v1",
       kind: "App",
@@ -106,7 +81,29 @@ spec:
             namespace: "fleet-default"
           }
         ],
-        valVol
+        values: {
+          autoDiscovery: {
+            clusterName: nameCl
+          },
+          cloudProvider: "clusterapi",
+          extraArgs: {
+            "balance-similar-node-groups": true,
+            "clusterapi-cloud-config-authoritative": true,
+            "cordon-node-before-terminating": true,
+            "daemonset-eviction-for-empty-nodes": true,
+            "kubeconfig": "/etc/kubeconfig/value",
+            "namespace": "kube-system",
+            "node-group-auto-discovery": "clusterapi:clusterName=" + nameCl,
+            "skip-nodes-with-local-storage": false,
+            "skip-nodes-with-system-pods": false
+          },
+          extraVolumeSecrets: {
+            kubeconfig: {
+              mountPath: "/etc/kubeconfig",
+              name: nameCl + "-kubeconfig"
+            }
+          }
+        }
       }
     });
     fetchSync("https://" + env('RANCHER_URL') + "/v1/catalog.cattle.io.clusterrepos/autoscaler?action=upgrade", {
@@ -126,7 +123,29 @@ spec:
                         "catalog.cattle.io/ui-source-repo-type":"cluster",
                         "catalog.cattle.io/ui-source-repo":"autoscaler"
                       },
-                      valVol,
+                      "values":{
+                        "autoDiscovery":{
+                            "clusterName":nameCl
+                        },
+                        "cloudProvider":"clusterapi",
+                        "extraArgs":{
+                            "balance-similar-node-groups":true,
+                            "clusterapi-cloud-config-authoritative":true,
+                            "cordon-node-before-terminating":true,
+                            "daemonset-eviction-for-empty-nodes":true,
+                            "kubeconfig":"/etc/kubeconfig/value",
+                            "namespace":"kube-system",
+                            "node-group-auto-discovery":"clusterapi:clusterName=" + nameCl,
+                            "skip-nodes-with-local-storage":false,
+                            "skip-nodes-with-system-pods":false
+                        },
+                        "extraVolumeSecrets":{
+                            "kubeconfig":{
+                              "mountPath":"/etc/kubeconfig",
+                              "name":nameCl + "-kubeconfig"
+                            }
+                        }
+                      },
                       "resetValues":false
                   }
                 ],
