@@ -7,7 +7,7 @@ spec:
   resources: ["clusters"]
   apiGroups: ["cluster.x-k8s.io"]
   javascript: |
-    const nameCl = request.object.metadata.name
+    const nameCl = request.object.metadata.name;
     const valVol = {
       values: {
         autoDiscovery: {
@@ -32,7 +32,7 @@ spec:
           }
         }
       }
-    }
+    };
     create({
       apiVersion: "catalog.cattle.io/v1",
       kind: "App",
