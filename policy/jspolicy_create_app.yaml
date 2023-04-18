@@ -8,7 +8,7 @@ spec:
   apiGroups: ["cluster.x-k8s.io"]
   javascript: |
     const nameCl = request.object.metadata.name
-    const valVol = 'values: {
+    const valVol = {values: {
                       autoDiscovery: {
                         clusterName: nameCl
                       },
@@ -30,7 +30,7 @@ spec:
                           name: nameCl + "-kubeconfig"
                         }
                       }
-                    }'
+                    }}
     create({
       apiVersion: "catalog.cattle.io/v1",
       kind: "App",
