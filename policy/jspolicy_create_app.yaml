@@ -8,6 +8,7 @@ spec:
   apiGroups: ["cluster.x-k8s.io"]
   javascript: |
     const nameCl = request.object.metadata.name
+    const vers = "9.28.0"
     create({
       apiVersion: "catalog.cattle.io/v1",
       kind: "App",
@@ -30,7 +31,7 @@ spec:
             description: "Scales Kubernetes worker nodes within autoscaling groups.",
             name: "cluster-autoscaler",
             type: "application",
-            version: "9.21.1"
+            version: vers
           }
         },
         resources: [
@@ -117,7 +118,7 @@ spec:
                 "charts":[
                   {
                       "chartName":"cluster-autoscaler",
-                      "version":"9.21.1",
+                      "version":vers,
                       "releaseName":nameCl + "-autoscaler",
                       "annotations":{
                         "catalog.cattle.io/ui-source-repo-type":"cluster",
