@@ -1,7 +1,7 @@
 patches:
 - patch: |-
     - op: add
-      path: "/spec/chart/values/env/"
+      path: "/spec/chart/values/env/-"
       value:
         name: MY_ENV
         value: "2"
