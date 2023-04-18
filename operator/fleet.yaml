@@ -19,3 +19,4 @@ helm:
   valuesFrom:
     - kind: ConfigMap
       name: env-for-js
+      namespace: kube-system
