@@ -2,11 +2,10 @@ patches:
 - patch: |-
     - op: add
       path: "/spec/template/spec/containers/0/env/-"
-      values:
-        valuesFrom:
-          - configMapKeyRef:
-              name: env-for-js
-              namespace: kube-system
+      valuesFrom:
+        - configMapKeyRef:
+            name: env-for-js
+            namespace: kube-system
   target:
     kind: Deployment
     namespace: kube-system
