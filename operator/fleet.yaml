@@ -1,7 +1,7 @@
 defaultNamespace: kube-system
 
 kustomize:
-  dir: ./
+  dir: ./operator
 
 helm:
   releaseName: jspolicy
