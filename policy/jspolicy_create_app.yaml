@@ -8,29 +8,31 @@ spec:
   apiGroups: ["cluster.x-k8s.io"]
   javascript: |
     const nameCl = request.object.metadata.name
-    const valVol = {values: {
-                      autoDiscovery: {
-                        clusterName: nameCl
-                      },
-                      cloudProvider: "clusterapi",
-                      extraArgs: {
-                        "balance-similar-node-groups": true,
-                        "clusterapi-cloud-config-authoritative": true,
-                        "cordon-node-before-terminating": true,
-                        "daemonset-eviction-for-empty-nodes": true,
-                        "kubeconfig": "/etc/kubeconfig/value",
-                        "namespace": "kube-system",
-                        "node-group-auto-discovery": "clusterapi:clusterName=" + nameCl,
-                        "skip-nodes-with-local-storage": false,
-                        "skip-nodes-with-system-pods": false
-                      },
-                      extraVolumeSecrets: {
-                        kubeconfig: {
-                          mountPath: "/etc/kubeconfig",
-                          name: nameCl + "-kubeconfig"
-                        }
-                      }
-                    }}
+    const valVol = {
+      values: {
+        autoDiscovery: {
+          clusterName: nameCl
+        },
+        cloudProvider: "clusterapi",
+        extraArgs: {
+          "balance-similar-node-groups": true,
+          "clusterapi-cloud-config-authoritative": true,
+          "cordon-node-before-terminating": true,
+          "daemonset-eviction-for-empty-nodes": true,
+          "kubeconfig": "/etc/kubeconfig/value",
+          "namespace": "kube-system",
+          "node-group-auto-discovery": "clusterapi:clusterName=" + nameCl,
+          "skip-nodes-with-local-storage": false,
+          "skip-nodes-with-system-pods": false
+        },
+        extraVolumeSecrets: {
+          kubeconfig: {
+            mountPath: "/etc/kubeconfig",
+            name: nameCl + "-kubeconfig"
+          }
+        }
+      }
+    }
     create({
       apiVersion: "catalog.cattle.io/v1",
       kind: "App",
