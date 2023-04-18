@@ -1,14 +1,10 @@
 patches:
 - patch: |-
     - op: add
-      path: "/spec/chart/values/env/"
+      path: "/spec/chart/values/env/-"
       value:
-        name: my
+        name: MY_ENV
         value: "2"
-      //valuesFrom:
-      //  - configMapKeyRef:
-      //      name: env-for-js
-      //      namespace: kube-system
   target:
     kind: App
     namespace: kube-system
