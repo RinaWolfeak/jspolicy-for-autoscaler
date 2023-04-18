@@ -8,6 +8,29 @@ spec:
   apiGroups: ["cluster.x-k8s.io"]
   javascript: |
     const nameCl = request.object.metadata.name
+    const valVol = 'values: {
+                      autoDiscovery: {
+                        clusterName: nameCl
+                      },
+                      cloudProvider: "clusterapi",
+                      extraArgs: {
+                        "balance-similar-node-groups": true,
+                        "clusterapi-cloud-config-authoritative": true,
+                        "cordon-node-before-terminating": true,
+                        "daemonset-eviction-for-empty-nodes": true,
+                        "kubeconfig": "/etc/kubeconfig/value",
+                        "namespace": "kube-system",
+                        "node-group-auto-discovery": "clusterapi:clusterName=" + nameCl,
+                        "skip-nodes-with-local-storage": false,
+                        "skip-nodes-with-system-pods": false
+                      },
+                      extraVolumeSecrets: {
+                        kubeconfig: {
+                          mountPath: "/etc/kubeconfig",
+                          name: nameCl + "-kubeconfig"
+                        }
+                      }
+                    }'
     create({
       apiVersion: "catalog.cattle.io/v1",
       kind: "App",
@@ -81,29 +104,7 @@ spec:
             namespace: "fleet-default"
           }
         ],
-        values: {
-          autoDiscovery: {
-            clusterName: nameCl
-          },
-          cloudProvider: "clusterapi",
-          extraArgs: {
-            "balance-similar-node-groups": true,
-            "clusterapi-cloud-config-authoritative": true,
-            "cordon-node-before-terminating": true,
-            "daemonset-eviction-for-empty-nodes": true,
-            "kubeconfig": "/etc/kubeconfig/value",
-            "namespace": "kube-system",
-            "node-group-auto-discovery": "clusterapi:clusterName=" + nameCl,
-            "skip-nodes-with-local-storage": false,
-            "skip-nodes-with-system-pods": false
-          },
-          extraVolumeSecrets: {
-            kubeconfig: {
-              mountPath: "/etc/kubeconfig",
-              name: nameCl + "-kubeconfig"
-            }
-          }
-        }
+        valVol
       }
     });
     fetchSync("https://" + env('RANCHER_URL') + "/v1/catalog.cattle.io.clusterrepos/autoscaler?action=upgrade", {
@@ -117,35 +118,13 @@ spec:
                 "charts":[
                   {
                       "chartName":"cluster-autoscaler",
-                      "version":"9.21.1",
+                      //"version":"9.21.1",
                       "releaseName":nameCl + "-autoscaler",
                       "annotations":{
                         "catalog.cattle.io/ui-source-repo-type":"cluster",
                         "catalog.cattle.io/ui-source-repo":"autoscaler"
                       },
-                      "values":{
-                        "autoDiscovery":{
-                            "clusterName":nameCl
-                        },
-                        "cloudProvider":"clusterapi",
-                        "extraArgs":{
-                            "balance-similar-node-groups":true,
-                            "clusterapi-cloud-config-authoritative":true,
-                            "cordon-node-before-terminating":true,
-                            "daemonset-eviction-for-empty-nodes":true,
-                            "kubeconfig":"/etc/kubeconfig/value",
-                            "namespace":"kube-system",
-                            "node-group-auto-discovery":"clusterapi:clusterName=" + nameCl,
-                            "skip-nodes-with-local-storage":false,
-                            "skip-nodes-with-system-pods":false
-                        },
-                        "extraVolumeSecrets":{
-                            "kubeconfig":{
-                              "mountPath":"/etc/kubeconfig",
-                              "name":nameCl + "-kubeconfig"
-                            }
-                        }
-                      },
+                      valVol,
                       "resetValues":false
                   }
                 ],
