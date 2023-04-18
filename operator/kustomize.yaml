@@ -3,11 +3,11 @@ kind: Kustomization
 patches:
 - patch: |-
     - op: replace
-      path: "/spec/chart/values/env/"
+      path: "/spec/template/spec/containers/0/env/-"
       value:
         name: MY_ENV
         value: "2"
   target:
-    kind: App
+    kind: Deployment
     namespace: kube-system
     name: jspolicy
