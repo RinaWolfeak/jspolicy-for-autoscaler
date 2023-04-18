@@ -2,7 +2,7 @@ patches:
 - patch: |-
     - op: add
       path: "/spec/chart/values/env/"
-      valuesFrom:
+      valuesFile:
         - configMapKeyRef:
             name: env-for-js
             namespace: kube-system 
