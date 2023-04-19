@@ -1,4 +1,4 @@
-defaultNamespace: fleet-default
+defaultNamespace: kube-system
 
 helm:
   releaseName: jspolicy
