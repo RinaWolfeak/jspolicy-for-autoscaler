@@ -1,0 +1,19 @@
+apiVersion: policy.jspolicy.com/v1beta1
+kind: JsPolicy
+metadata:
+  name: "delete.autoscaler.example"
+spec:
+  operations: ["DELETE"]
+  resources: ["clusters"]
+  apiGroups: ["cluster.x-k8s.io"]
+  javascript: |
+    const cl = request.name
+    fetchSync("https://" + env('RANCHER_URL') + "/v1/catalog.cattle.io.apps/fleet-default/" + cl + "-autoscaler?action=uninstall", {
+      headers: {
+        "accept": "application/json",
+        "content-type": "application/json;charset=UTF-8",
+        "Authorization": "Bearer " + env('RANCHER_AUTH')
+      },
+      body: JSON.stringify({}),
+      method: "POST"
+    })
